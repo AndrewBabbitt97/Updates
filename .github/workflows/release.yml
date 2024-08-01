@@ -1,0 +1,32 @@
+name: Release Project
+
+on:
+  release:
+    types: [prereleased,released]
+
+jobs:
+  release:
+    name: Release Project
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Build changelog
+        id: changelog
+        uses: mikepenz/release-changelog-builder-action@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          toTag: ${{ github.event.release.tag_name }}
+          commitMode: true
+          configuration: .github/changelog.json
+
+      - name: Update release
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.event.release.tag_name }}
+          allowUpdates: true
+          prerelease: ${{ github.event.release.prerelease }}
+          body: ${{ steps.changelog.outputs.changelog }}
