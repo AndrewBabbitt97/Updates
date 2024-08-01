@@ -63,7 +63,7 @@
             "target": "$1"
         }
     ],
-    "template": "${{CHANGELOG}}",
+    "template": "#{{CHANGELOG}}",
     "pr_template": "- ${{TITLE}}",
     "empty_template": "- No Changes",
     "max_tags_to_fetch": 1000,
